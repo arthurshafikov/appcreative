@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 
+	"github.com/arthurshafikov/appcreative/backend/internal/core"
 	"github.com/arthurshafikov/appcreative/backend/internal/services"
 	"github.com/gin-gonic/gin"
 )
@@ -10,10 +11,6 @@ import (
 type Handler struct {
 	ctx      context.Context
 	services *services.Services
-}
-
-type ErrorResponse struct {
-	Error string `json:"error"`
 }
 
 func NewHandler(
@@ -29,8 +26,8 @@ func NewHandler(
 func (h *Handler) InitRoutes(e *gin.Engine) {
 }
 
-func (h *Handler) setErrorJSONResponse(ctx *gin.Context, code int, err string) {
-	ctx.JSON(code, ErrorResponse{
-		Error: err,
+func (h *Handler) setErrorJSONResponse(ctx *gin.Context, code int, errorBag core.ErrorBag) {
+	ctx.JSON(code, core.ErrorResponse{
+		Errors: errorBag,
 	})
 }
