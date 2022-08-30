@@ -25,11 +25,11 @@ func NewServer(handler *handler.Handler) *Server {
 	}
 }
 
-func (s *Server) Serve(ctx context.Context, port int) {
+func (s *Server) Serve(ctx context.Context, port string) {
 	s.handler.InitRoutes(s.Engine)
 
 	s.httpSrv = &http.Server{
-		Addr:    fmt.Sprintf(":%v", port),
+		Addr:    fmt.Sprintf(":%s", port),
 		Handler: s.Engine,
 	}
 
