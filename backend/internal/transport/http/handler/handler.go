@@ -24,6 +24,7 @@ func NewHandler(
 }
 
 func (h *Handler) InitRoutes(e *gin.Engine) {
+	h.initWeatherRoutes(e)
 }
 
 func (h *Handler) setErrorJSONResponse(ctx *gin.Context, code int, errorBag core.ErrorBag) {
