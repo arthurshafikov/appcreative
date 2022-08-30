@@ -2,8 +2,7 @@ package services
 
 import "github.com/arthurshafikov/appcreative/backend/internal/core"
 
-type WeatherService struct {
-}
+type WeatherService struct{}
 
 func NewWeatherService() *WeatherService {
 	return &WeatherService{}
