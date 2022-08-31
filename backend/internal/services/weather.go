@@ -9,22 +9,39 @@ import (
 type WeatherService struct {
 	logger Logger
 	client WeatherClient
+	cache  Cache
 }
 
-func NewWeatherService(logger Logger, client WeatherClient) *WeatherService {
+func NewWeatherService(logger Logger, client WeatherClient, cache Cache) *WeatherService {
 	return &WeatherService{
 		logger: logger,
 		client: client,
+		cache:  cache,
 	}
 }
 
 func (s *WeatherService) GetCurrentWeather(city string) (*core.WeatherResponse, error) {
-	weatherResponse, err := s.client.GetCurrentWeather(city)
+	weatherResponse := &core.WeatherResponse{}
+	err := s.cache.GetAndUnmarshal(city, weatherResponse)
+	if err == nil {
+		return weatherResponse, nil
+	}
+	if !errors.Is(err, core.ErrNotFound) {
+		s.logger.Error(err)
+		return nil, core.ErrInternalServerError
+	}
+
+	weatherResponse, err = s.client.GetCurrentWeather(city)
 	if err != nil {
 		if errors.Is(err, core.ErrCityNotFound) {
 			return nil, err
 		}
 
+		s.logger.Error(err)
+		return nil, core.ErrInternalServerError
+	}
+
+	if err := s.cache.MarshalAndSet(city, *weatherResponse); err != nil {
 		s.logger.Error(err)
 		return nil, core.ErrInternalServerError
 	}

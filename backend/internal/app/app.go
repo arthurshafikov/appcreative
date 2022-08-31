@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 
+	"github.com/arthurshafikov/appcreative/backend/internal/cache"
 	"github.com/arthurshafikov/appcreative/backend/internal/clients"
 	"github.com/arthurshafikov/appcreative/backend/internal/config"
 	"github.com/arthurshafikov/appcreative/backend/internal/logger"
@@ -25,9 +26,14 @@ func Run() {
 	config := config.NewConfig(envFileLocation)
 	logger := logger.NewLogger()
 	openWeatherMapClient := clients.NewOpenWeatherMap(config.OpenWeatherMapConfig.APIKey)
+	redis := cache.NewRedis(cache.RedisConfig{
+		Address:      config.RedisConfig.Address,
+		TTLInSeconds: config.RedisConfig.TTLInSeconds,
+	})
 	services := services.NewServices(&services.Dependencies{
 		Logger:        logger,
 		WeatherClient: openWeatherMapClient,
+		Cache:         redis,
 	})
 
 	handler := handler.NewHandler(ctx, services)
