@@ -9,9 +9,9 @@ import (
 )
 
 func (h *Handler) initWeatherRoutes(e *gin.Engine) {
-	v1 := e.Group("/v1")
+	v1 := e.Group("v1")
 	{
-		v1.GET("/getCurrentWeather", h.getCurrentWeather)
+		v1.GET("getCurrentWeather", h.getCurrentWeather)
 	}
 }
 
