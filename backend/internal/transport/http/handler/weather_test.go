@@ -28,7 +28,7 @@ func TestGetCurrentWeather(t *testing.T) {
 		weatherServiceMock.EXPECT().GetCurrentWeather(city).Times(1).Return(&core.WeatherResponse{
 			City:        city,
 			Temperature: 20,
-		}),
+		}, nil),
 	)
 	ctx.Request = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/v1/getCurrentWeather?city=%s", city), nil)
 

@@ -23,7 +23,11 @@ func (h *Handler) getCurrentWeather(ctx *gin.Context) {
 		return
 	}
 
-	response := h.services.Weather.GetCurrentWeather(city)
+	response, err := h.services.Weather.GetCurrentWeather(city)
+	if err != nil {
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
 
 	ctx.JSON(200, response)
 }

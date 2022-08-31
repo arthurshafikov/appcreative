@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 
+	"github.com/arthurshafikov/appcreative/backend/internal/clients"
 	"github.com/arthurshafikov/appcreative/backend/internal/config"
 	"github.com/arthurshafikov/appcreative/backend/internal/services"
 	"github.com/arthurshafikov/appcreative/backend/internal/transport/http"
@@ -21,7 +22,10 @@ func Run() {
 
 	ctx := context.Background()
 	config := config.NewConfig(envFileLocation)
-	services := services.NewServices()
+	openWeatherMapClient := clients.NewOpenWeatherMap(config.OpenWeatherMapConfig.APIKey)
+	services := services.NewServices(&services.Dependencies{
+		WeatherClient: openWeatherMapClient,
+	})
 
 	handler := handler.NewHandler(ctx, services)
 	http.NewServer(handler).Serve(ctx, config.ServerConfig.Port)

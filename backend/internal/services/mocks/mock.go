@@ -35,15 +35,54 @@ func (m *MockWeather) EXPECT() *MockWeatherMockRecorder {
 }
 
 // GetCurrentWeather mocks base method.
-func (m *MockWeather) GetCurrentWeather(city string) *core.WeatherResponse {
+func (m *MockWeather) GetCurrentWeather(city string) (*core.WeatherResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCurrentWeather", city)
 	ret0, _ := ret[0].(*core.WeatherResponse)
-	return ret0
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // GetCurrentWeather indicates an expected call of GetCurrentWeather.
 func (mr *MockWeatherMockRecorder) GetCurrentWeather(city interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCurrentWeather", reflect.TypeOf((*MockWeather)(nil).GetCurrentWeather), city)
+}
+
+// MockWeatherClient is a mock of WeatherClient interface.
+type MockWeatherClient struct {
+	ctrl     *gomock.Controller
+	recorder *MockWeatherClientMockRecorder
+}
+
+// MockWeatherClientMockRecorder is the mock recorder for MockWeatherClient.
+type MockWeatherClientMockRecorder struct {
+	mock *MockWeatherClient
+}
+
+// NewMockWeatherClient creates a new mock instance.
+func NewMockWeatherClient(ctrl *gomock.Controller) *MockWeatherClient {
+	mock := &MockWeatherClient{ctrl: ctrl}
+	mock.recorder = &MockWeatherClientMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockWeatherClient) EXPECT() *MockWeatherClientMockRecorder {
+	return m.recorder
+}
+
+// GetCurrentWeather mocks base method.
+func (m *MockWeatherClient) GetCurrentWeather(city string) (*core.WeatherResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetCurrentWeather", city)
+	ret0, _ := ret[0].(*core.WeatherResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetCurrentWeather indicates an expected call of GetCurrentWeather.
+func (mr *MockWeatherClientMockRecorder) GetCurrentWeather(city interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCurrentWeather", reflect.TypeOf((*MockWeatherClient)(nil).GetCurrentWeather), city)
 }

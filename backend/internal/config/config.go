@@ -8,7 +8,12 @@ import (
 )
 
 type Config struct {
+	OpenWeatherMapConfig
 	ServerConfig
+}
+
+type OpenWeatherMapConfig struct {
+	APIKey string
 }
 
 type ServerConfig struct {
@@ -21,6 +26,9 @@ func NewConfig(envFileLocation string) *Config {
 	}
 
 	return &Config{
+		OpenWeatherMapConfig: OpenWeatherMapConfig{
+			APIKey: os.Getenv("OPEN_WEATHER_MAP_API_KEY"),
+		},
 		ServerConfig: ServerConfig{
 			Port: os.Getenv("APP_PORT"),
 		},
