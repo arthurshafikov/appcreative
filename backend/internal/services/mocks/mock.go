@@ -49,6 +49,41 @@ func (mr *MockWeatherMockRecorder) GetCurrentWeather(city interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCurrentWeather", reflect.TypeOf((*MockWeather)(nil).GetCurrentWeather), city)
 }
 
+// MockLogger is a mock of Logger interface.
+type MockLogger struct {
+	ctrl     *gomock.Controller
+	recorder *MockLoggerMockRecorder
+}
+
+// MockLoggerMockRecorder is the mock recorder for MockLogger.
+type MockLoggerMockRecorder struct {
+	mock *MockLogger
+}
+
+// NewMockLogger creates a new mock instance.
+func NewMockLogger(ctrl *gomock.Controller) *MockLogger {
+	mock := &MockLogger{ctrl: ctrl}
+	mock.recorder = &MockLoggerMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockLogger) EXPECT() *MockLoggerMockRecorder {
+	return m.recorder
+}
+
+// Error mocks base method.
+func (m *MockLogger) Error(err error) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "Error", err)
+}
+
+// Error indicates an expected call of Error.
+func (mr *MockLoggerMockRecorder) Error(err interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Error", reflect.TypeOf((*MockLogger)(nil).Error), err)
+}
+
 // MockWeatherClient is a mock of WeatherClient interface.
 type MockWeatherClient struct {
 	ctrl     *gomock.Controller
@@ -85,4 +120,55 @@ func (m *MockWeatherClient) GetCurrentWeather(city string) (*core.WeatherRespons
 func (mr *MockWeatherClientMockRecorder) GetCurrentWeather(city interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCurrentWeather", reflect.TypeOf((*MockWeatherClient)(nil).GetCurrentWeather), city)
+}
+
+// MockCache is a mock of Cache interface.
+type MockCache struct {
+	ctrl     *gomock.Controller
+	recorder *MockCacheMockRecorder
+}
+
+// MockCacheMockRecorder is the mock recorder for MockCache.
+type MockCacheMockRecorder struct {
+	mock *MockCache
+}
+
+// NewMockCache creates a new mock instance.
+func NewMockCache(ctrl *gomock.Controller) *MockCache {
+	mock := &MockCache{ctrl: ctrl}
+	mock.recorder = &MockCacheMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockCache) EXPECT() *MockCacheMockRecorder {
+	return m.recorder
+}
+
+// GetAndUnmarshal mocks base method.
+func (m *MockCache) GetAndUnmarshal(key string, pointer any) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAndUnmarshal", key, pointer)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// GetAndUnmarshal indicates an expected call of GetAndUnmarshal.
+func (mr *MockCacheMockRecorder) GetAndUnmarshal(key, pointer interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAndUnmarshal", reflect.TypeOf((*MockCache)(nil).GetAndUnmarshal), key, pointer)
+}
+
+// MarshalAndSet mocks base method.
+func (m *MockCache) MarshalAndSet(key string, value any) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "MarshalAndSet", key, value)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// MarshalAndSet indicates an expected call of MarshalAndSet.
+func (mr *MockCacheMockRecorder) MarshalAndSet(key, value interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MarshalAndSet", reflect.TypeOf((*MockCache)(nil).MarshalAndSet), key, value)
 }
