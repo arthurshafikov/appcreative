@@ -16,7 +16,7 @@ import (
 var envFileLocation string
 
 func init() {
-	flag.StringVar(&envFileLocation, "env", "./deployments/.env", "Path to .env file")
+	flag.StringVar(&envFileLocation, "env", "./.env", "Path to .env file")
 }
 
 func Run() {
