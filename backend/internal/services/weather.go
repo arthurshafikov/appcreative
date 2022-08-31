@@ -28,7 +28,7 @@ func (s *WeatherService) GetCurrentWeather(city string) (*core.WeatherResponse, 
 	}
 	if !errors.Is(err, core.ErrNotFound) {
 		s.logger.Error(err)
-		return nil, core.ErrInternalServerError
+		return nil, core.ErrInternalServer
 	}
 
 	weatherResponse, err = s.client.GetCurrentWeather(city)
@@ -38,12 +38,12 @@ func (s *WeatherService) GetCurrentWeather(city string) (*core.WeatherResponse, 
 		}
 
 		s.logger.Error(err)
-		return nil, core.ErrInternalServerError
+		return nil, core.ErrInternalServer
 	}
 
 	if err := s.cache.MarshalAndSet(city, *weatherResponse); err != nil {
 		s.logger.Error(err)
-		return nil, core.ErrInternalServerError
+		return nil, core.ErrInternalServer
 	}
 
 	return weatherResponse, nil

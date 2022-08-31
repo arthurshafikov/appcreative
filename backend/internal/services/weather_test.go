@@ -24,12 +24,12 @@ func TestGetCurrentWeatherFoundInCache(t *testing.T) {
 func TestGetCurrentWeatherCacheReturnedError(t *testing.T) {
 	weatherService, loggerMock, _, cacheMock := getWeatherServiceWithMocks(t)
 	gomock.InOrder(
-		cacheMock.EXPECT().GetAndUnmarshal(city, gomock.Any()).Return(core.ErrInternalServerError),
-		loggerMock.EXPECT().Error(core.ErrInternalServerError),
+		cacheMock.EXPECT().GetAndUnmarshal(city, gomock.Any()).Return(core.ErrInternalServer),
+		loggerMock.EXPECT().Error(core.ErrInternalServer),
 	)
 
 	_, err := weatherService.GetCurrentWeather(city)
-	require.ErrorIs(t, err, core.ErrInternalServerError)
+	require.ErrorIs(t, err, core.ErrInternalServer)
 }
 
 func TestGetCurrentWeatherNotInCache(t *testing.T) {
@@ -64,13 +64,13 @@ func TestGetCurrentWeatherNotInCacheClientServerError(t *testing.T) {
 	weatherService, loggerMock, clientMock, cacheMock := getWeatherServiceWithMocks(t)
 	gomock.InOrder(
 		cacheMock.EXPECT().GetAndUnmarshal(city, gomock.Any()).Return(core.ErrNotFound),
-		clientMock.EXPECT().GetCurrentWeather(city).Return(nil, core.ErrInternalServerError),
-		loggerMock.EXPECT().Error(core.ErrInternalServerError),
+		clientMock.EXPECT().GetCurrentWeather(city).Return(nil, core.ErrInternalServer),
+		loggerMock.EXPECT().Error(core.ErrInternalServer),
 	)
 
 	weatherResponse, err := weatherService.GetCurrentWeather(city)
 	require.Nil(t, weatherResponse)
-	require.ErrorIs(t, err, core.ErrInternalServerError)
+	require.ErrorIs(t, err, core.ErrInternalServer)
 }
 
 func TestGetCurrentWeatherNotInCacheSetCacheServerError(t *testing.T) {
@@ -81,13 +81,13 @@ func TestGetCurrentWeatherNotInCacheSetCacheServerError(t *testing.T) {
 	gomock.InOrder(
 		cacheMock.EXPECT().GetAndUnmarshal(city, gomock.Any()).Return(core.ErrNotFound),
 		clientMock.EXPECT().GetCurrentWeather(city).Return(weatherResponse, nil),
-		cacheMock.EXPECT().MarshalAndSet(city, *weatherResponse).Return(core.ErrInternalServerError),
-		loggerMock.EXPECT().Error(core.ErrInternalServerError),
+		cacheMock.EXPECT().MarshalAndSet(city, *weatherResponse).Return(core.ErrInternalServer),
+		loggerMock.EXPECT().Error(core.ErrInternalServer),
 	)
 
 	weatherResponse, err := weatherService.GetCurrentWeather(city)
 	require.Nil(t, weatherResponse)
-	require.ErrorIs(t, err, core.ErrInternalServerError)
+	require.ErrorIs(t, err, core.ErrInternalServer)
 }
 
 func getWeatherServiceWithMocks(
