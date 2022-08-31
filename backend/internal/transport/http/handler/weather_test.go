@@ -24,10 +24,11 @@ func TestGetCurrentWeather(t *testing.T) {
 	}
 	writer, ctx, engine := getWriterContextAndHandler(t, services)
 	city := "Oslo"
+	temperature := float64(20.5)
 	gomock.InOrder(
 		weatherServiceMock.EXPECT().GetCurrentWeather(city).Times(1).Return(&core.WeatherResponse{
 			City:        city,
-			Temperature: 20,
+			Temperature: temperature,
 		}, nil),
 	)
 	ctx.Request = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/v1/getCurrentWeather?city=%s", city), nil)
@@ -38,7 +39,7 @@ func TestGetCurrentWeather(t *testing.T) {
 	require.NoError(t, json.Unmarshal(writer.Body.Bytes(), &jsonResponse))
 	require.Equal(t, http.StatusOK, writer.Code)
 	require.Equal(t, city, jsonResponse.City)
-	require.Equal(t, 20, jsonResponse.Temperature)
+	require.Equal(t, temperature, jsonResponse.Temperature)
 }
 
 func TestGetCurrentWeatherMissingCity(t *testing.T) {

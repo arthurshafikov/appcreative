@@ -2,7 +2,7 @@ package core
 
 type WeatherResponse struct {
 	City             string           `json:"city"`
-	Temperature      int              `json:"temperature"`
+	Temperature      float64          `json:"temperature"`
 	WeatherCondition WeatherCondition `json:"weatherCondition"`
 	Wind             WindStatus       `json:"wind"`
 }
