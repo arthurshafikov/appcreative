@@ -53,6 +53,10 @@ func (owm *OpenWeatherMap) GetCurrentWeather(city string) (*core.WeatherResponse
 		return nil, err
 	}
 
+	if len(responseJSON.Weather) < 1 {
+		return nil, core.ErrCityNotFound
+	}
+
 	return &core.WeatherResponse{
 		City:        city,
 		Temperature: responseJSON.MainInfo.Temperature,

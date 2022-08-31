@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/arthurshafikov/appcreative/backend/internal/core"
@@ -25,6 +26,13 @@ func (h *Handler) getCurrentWeather(ctx *gin.Context) {
 
 	response, err := h.services.Weather.GetCurrentWeather(city)
 	if err != nil {
+		if errors.Is(err, core.ErrCityNotFound) {
+			h.setErrorJSONResponse(ctx, http.StatusUnprocessableEntity, core.ErrorBag{
+				"city": []string{core.ErrCityNotFound.Error()},
+			})
+			return
+		}
+
 		ctx.Status(http.StatusInternalServerError)
 		return
 	}
