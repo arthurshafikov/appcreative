@@ -47,7 +47,7 @@ func TestGetCurrentWeatherMissingCity(t *testing.T) {
 	writer, ctx, engine := getWriterContextAndHandler(t, services)
 	ctx.Request = httptest.NewRequest(http.MethodGet, "/v1/getCurrentWeather", nil)
 	expectedErrors := core.ErrorBag{
-		"city": []string{core.CityNotDefined},
+		"city": []string{core.ErrCityNotDefined.Error()},
 	}
 
 	engine.ServeHTTP(writer, ctx.Request)

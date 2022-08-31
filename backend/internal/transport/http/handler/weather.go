@@ -19,7 +19,7 @@ func (h *Handler) getCurrentWeather(ctx *gin.Context) {
 	city := ctx.Query("city")
 	if city == "" {
 		h.setErrorJSONResponse(ctx, http.StatusUnprocessableEntity, core.ErrorBag{
-			"city": []string{core.CityNotDefined},
+			"city": []string{core.ErrCityNotDefined.Error()},
 		})
 		return
 	}
