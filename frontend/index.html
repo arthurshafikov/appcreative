@@ -5,9 +5,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AppCreative</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
+    <main>
+        <div class="container">
+            <div class="form">
+                <div class="errors hidden"></div>
+                <form action="">
+                    <label for="">
+                        <input type="text" name="city" required>
+                    </label>
+
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+
+            <div class="results">
+                <h3>Results for <span id="city-name">City Name</span>:</h3>
+                
+                <div class="results-box">
+                    <p>Temperature: <span id="temperature"></span> °C</p>
+                    <p>Weather conditions: <span id="weather-conditions"></span></p>
+                    <br>
+                    <p>Wind: <span id="wind-speed"></span> km/h</p>
+                    <p>Wind direction: <span id="wind-direction"></span></p>
+                    <p>Pressure: <span id="pressure"></span></p>
+                    <p>Humidity: <span id="humidity"></span></p>
+                </div>
+            </div>
+        </div>
+    </main>
     <script src="main.js" async></script>
 </body>
 </html>
