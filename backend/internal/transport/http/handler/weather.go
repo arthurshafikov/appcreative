@@ -16,6 +16,7 @@ func (h *Handler) initWeatherRoutes(e *gin.Engine) {
 }
 
 func (h *Handler) getCurrentWeather(ctx *gin.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
 	city := ctx.Query("city")
 	if city == "" {
 		h.setErrorJSONResponse(ctx, http.StatusUnprocessableEntity, core.ErrorBag{
