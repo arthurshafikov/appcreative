@@ -18,6 +18,7 @@ test:
 
 mocks:
 	mockgen -source=./internal/services/services.go -destination ./internal/services/mocks/mock.go
+	mockgen -source=./internal/transport/http/server.go -destination ./internal/transport/http/mocks/mock.go
 
 up:
 	docker-compose --env-file ./.env -f ${DOCKER_COMPOSE_FILE} -p ${APP_NAME} up -d --build
