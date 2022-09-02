@@ -43,7 +43,7 @@ func Run() {
 	})
 
 	handler := handler.NewHandler(ctx, services)
-	http.NewServer(handler).Serve(group, ctx, config.ServerConfig.Port)
+	http.NewServer(handler, logger).Serve(group, ctx, config.ServerConfig.Port)
 
 	if err := group.Wait(); err != nil {
 		log.Fatalln(err)
