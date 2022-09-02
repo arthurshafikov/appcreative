@@ -29,7 +29,7 @@ func TestServe(t *testing.T) {
 		return nil
 	})
 
-	server.Serve(group, ctx, "9999")
+	server.Serve(ctx, group, "9999")
 
 	require.Equal(t, ":9999", server.httpSrv.Addr)
 	require.NoError(t, group.Wait())

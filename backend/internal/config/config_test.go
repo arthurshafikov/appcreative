@@ -24,7 +24,6 @@ func TestNewConfig(t *testing.T) {
 	require.Equal(t, config.ServerConfig.Port, "9999")
 	require.Equal(t, config.RedisConfig.Address, "redis:6379")
 	require.Equal(t, config.RedisConfig.TTLInSeconds, 60)
-
 }
 
 func createFakeEnvFile(t *testing.T) {

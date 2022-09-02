@@ -35,7 +35,7 @@ func NewServer(handler Handler, logger Logger) *Server {
 	}
 }
 
-func (s *Server) Serve(g *errgroup.Group, ctx context.Context, port string) {
+func (s *Server) Serve(ctx context.Context, g *errgroup.Group, port string) {
 	s.handler.InitRoutes(s.Engine)
 
 	s.httpSrv = &http.Server{

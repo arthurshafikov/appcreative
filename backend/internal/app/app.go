@@ -3,7 +3,6 @@ package app
 import (
 	"context"
 	"flag"
-	"log"
 	"os/signal"
 	"syscall"
 
@@ -43,9 +42,9 @@ func Run() {
 	})
 
 	handler := handler.NewHandler(ctx, services)
-	http.NewServer(handler, logger).Serve(group, ctx, config.ServerConfig.Port)
+	http.NewServer(handler, logger).Serve(ctx, group, config.ServerConfig.Port)
 
 	if err := group.Wait(); err != nil {
-		log.Fatalln(err)
+		logger.Error(err)
 	}
 }
