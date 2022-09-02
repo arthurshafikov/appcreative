@@ -8,24 +8,28 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/arthurshafikov/appcreative/backend/internal/transport/http/handler"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/sync/errgroup"
 )
+
+type Handler interface {
+	InitRoutes(e *gin.Engine)
+}
 
 type Server struct {
 	httpSrv *http.Server
-	handler *handler.Handler
+	handler Handler
 	Engine  *gin.Engine
 }
 
-func NewServer(handler *handler.Handler) *Server {
+func NewServer(handler Handler) *Server {
 	return &Server{
 		handler: handler,
 		Engine:  gin.Default(),
 	}
 }
 
-func (s *Server) Serve(ctx context.Context, port string) {
+func (s *Server) Serve(g *errgroup.Group, ctx context.Context, port string) {
 	s.handler.InitRoutes(s.Engine)
 
 	s.httpSrv = &http.Server{
@@ -33,16 +37,19 @@ func (s *Server) Serve(ctx context.Context, port string) {
 		Handler: s.Engine,
 	}
 
-	go s.shutdownOnContextDone(ctx)
+	g.Go(func() error {
+		<-ctx.Done()
+		s.shutdown()
+
+		return nil
+	})
 
 	if err := s.httpSrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Println("Could not start listener ", err)
 	}
 }
 
-func (s *Server) shutdownOnContextDone(ctx context.Context) {
-	<-ctx.Done()
-
+func (s *Server) shutdown() {
 	log.Println("Shutdown Server ...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

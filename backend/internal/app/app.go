@@ -3,6 +3,9 @@ package app
 import (
 	"context"
 	"flag"
+	"log"
+	"os/signal"
+	"syscall"
 
 	"github.com/arthurshafikov/appcreative/backend/internal/cache"
 	"github.com/arthurshafikov/appcreative/backend/internal/clients"
@@ -11,6 +14,7 @@ import (
 	"github.com/arthurshafikov/appcreative/backend/internal/services"
 	"github.com/arthurshafikov/appcreative/backend/internal/transport/http"
 	"github.com/arthurshafikov/appcreative/backend/internal/transport/http/handler"
+	"golang.org/x/sync/errgroup"
 )
 
 var envFileLocation string
@@ -22,7 +26,9 @@ func init() {
 func Run() {
 	flag.Parse()
 
-	ctx := context.Background()
+	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
+	defer cancel()
+	group, ctx := errgroup.WithContext(ctx)
 	config := config.NewConfig(envFileLocation)
 	logger := logger.NewLogger()
 	openWeatherMapClient := clients.NewOpenWeatherMap(config.OpenWeatherMapConfig.APIKey)
@@ -37,5 +43,9 @@ func Run() {
 	})
 
 	handler := handler.NewHandler(ctx, services)
-	http.NewServer(handler).Serve(ctx, config.ServerConfig.Port)
+	http.NewServer(handler).Serve(group, ctx, config.ServerConfig.Port)
+
+	if err := group.Wait(); err != nil {
+		log.Fatalln(err)
+	}
 }
